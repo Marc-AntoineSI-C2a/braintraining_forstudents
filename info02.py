@@ -1,14 +1,17 @@
-# Training (INFO02)
-# JCY oct 23
-# PRO DB PY
+"""
+Author: Marc-Antoine Romao
+Module: PROJ-DBPY
+Date: 14.11.2023
+"""
+
 
 import tkinter as tk
 import random
-from math import pow
+from math import sqrt
 import time
 import database
 import datetime
-from tkinter.messagebox import *
+from database import *
 
 #important data (to save)
 pseudo="Gaston" #provisory pseudo for user
@@ -47,8 +50,13 @@ def next(event):
 
 
 def save_game(event):
+    global pseudo
+    pseudo = entry_pseudo.get()
+    database.add_students(pseudo)
+    get_player_id = database.get_playerid(pseudo)
+    get_exercise_id = database.get_exercisesid(exercise)
+    database.add_scores(start_date,nbsuccess,nbtrials,duration,get_player_id[0],get_exercise_id[0])
     print("dans save")
-    # TODO
 
 
 def test(event):
@@ -69,6 +77,7 @@ def test(event):
 
 
 def display_timer():
+    global duration
     duration = datetime.datetime.now() - start_date  # elapsed time since beginning, in time with decimals
     duration_s = int(duration.total_seconds())  # idem but in seconds (integer)
     # display min:sec (00:13)
@@ -77,7 +86,7 @@ def display_timer():
 
 
 def open_window_info_02(window):
-    global window_info02, lbl_duration, lbl_result, entry_n2, label_u2, label_n1, hex_color, start_date
+    global window_info02, lbl_duration, lbl_result, entry_n2, label_u2, label_n1, hex_color, start_date, entry_pseudo
     window_info02 = tk.Toplevel(window)
 
     #window_info02 = tk.Tk()
@@ -95,12 +104,12 @@ def open_window_info_02(window):
     lbl_duration = tk.Label(window_info02, text="0:00", font=("Arial", 15))
     lbl_duration.grid(row=0,column=2, ipady=5, padx=10,pady=10)
 
-    tk.Label(window_info02, text='Pseudo:', font=("Arial", 15)).grid(row=1, column=0, padx=5, pady=5)
+    tk.Label(window_info02, text='pseudo:', font=("Arial", 15)).grid(row=1, column=0, padx=5, pady=5)
     entry_pseudo = tk.Entry(window_info02, font=("Arial", 15))
     # entry_pseudo.pack(ipadx=2, ipady=10, padx=5,pady=5)
     entry_pseudo.grid(row=1, column=1)
 
-    lbl_result = tk.Label(window_info02, text=f"{pseudo}  Essais réussis : 0/0", font=("Arial", 15))
+    lbl_result = tk.Label(window_info02, text=f"Essais réussis : 0/0", font=("Arial", 15))
     lbl_result.grid( row=1, column=2,columnspan=3, ipady=5, padx=20,pady=20)
 
     label_n1 = tk.Label(window_info02, text="n1:",font=("Arial", 15))

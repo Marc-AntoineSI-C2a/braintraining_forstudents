@@ -1,6 +1,9 @@
-# Training (INFO05)
-# JCY oct 23
-# PRO DB PY
+"""
+Author:  Marc-Antoine Romao
+Module: PROJ-DBPY
+Date: 14.11.2023
+"""
+
 import math
 import tkinter as tk
 from tkinter.messagebox import showinfo          # Les alertes
@@ -12,6 +15,7 @@ import time
 import database
 import datetime
 from tkinter.messagebox import *
+from database import *
 
 # Main window
 # graphical variables
@@ -21,7 +25,7 @@ xmed=250 #middle of 2 color rectangles
 
 
 #important data (to save)
-pseudo="Gaston" #provisory pseudo for user
+pseudo="Gaston" #provisory player for user
 exercise="INFO05"
 nbtrials=0 #number of total trials
 nbsuccess=0 #number of successfull trials
@@ -191,11 +195,17 @@ def sl_v(event):
 
 
 def save_game(event):
+    global pseudo
+    pseudo = entry_pseudo.get()
+    database.add_students(pseudo)
+    get_player_id = database.get_playerid(pseudo)
+    get_exercise_id = database.get_exercisesid(exercise)
+    database.add_scores(start_date,nbsuccess,nbtrials,duration,get_player_id[0],get_exercise_id[0])
     print("dans save")
-    #TODO
 
 
 def display_timer():
+    global duration
     duration=datetime.datetime.now()-start_date #elapsed time since beginning, in time with decimals
     duration_s=int(duration.total_seconds()) #idem but in seconds (integer)
     #display min:sec (00:13)
@@ -204,7 +214,7 @@ def display_timer():
 
 
 def open_window_info_05(window):
-    global window_info05, lbl_duration, lbl_result, hex_color, start_date, slider_r, slider_g, slider_b, slider_v, entry_response, canvas
+    global window_info05, lbl_duration, lbl_result, hex_color, start_date, slider_r, slider_g, slider_b, slider_v, entry_response, canvas, entry_pseudo
     window_info05 = tk.Toplevel(window)
     window_info05.title("La couleur perdue")
     window_info05.geometry("1100x900")
@@ -221,7 +231,7 @@ def open_window_info_05(window):
     lbl_duration = tk.Label(window_info05, text="0:00", font=("Arial", 15))
     lbl_duration.grid(row=0,column=2, ipady=5, padx=10,pady=10)
 
-    tk.Label(window_info05, text='Pseudo:', font=("Arial", 15)).grid(row=1, column=0, padx=5, pady=5, sticky='E')
+    tk.Label(window_info05, text='pseudo:', font=("Arial", 15)).grid(row=1, column=0, padx=5, pady=5, sticky='E')
     entry_pseudo = tk.Entry(window_info05, font=("Arial", 15))
     entry_pseudo.grid(row=1, column=1,sticky='W')
 
