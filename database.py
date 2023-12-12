@@ -52,15 +52,24 @@ def get_playerid(player):
     cursor.close()
     return row
 
-def get_allScores():
-    query = "SELECT * FROM scores"
+def getresults(name=""):
+    try:
+        user_id = get_playerid(name)[0]
+    except:
+        user_id = None
     cursor = db_connection.cursor()
-    cursor.execute(query, multi=True)
-    rows = cursor.fetchall()
+    query = "SELECT Players_id, date_start,duration,Exercises_id, number_of_successes, number_of_tries FROM scores"
+    if user_id != None:
+        query += " where Players_id=%s"
+        cursor.execute(query,(user_id,))
+    else:
+        cursor.execute(query)
+    row = cursor.fetchall()
     cursor.close()
-    return rows
+    return row
 
-def get_playersnames(player_id):
+
+def get_playername(player_id):
     query = "SELECT name FROM players WHERE id = %s"
     cursor = db_connection.cursor()
     cursor.execute(query, (player_id,))
@@ -70,7 +79,7 @@ def get_playersnames(player_id):
 
 
 # Function to get exercises name by the ID
-def get_exercisesname(exercises_id):
+def get_exercisename(exercises_id):
     query = "SELECT name FROM exercises WHERE id = %s"
     cursor = db_connection.cursor()
     cursor.execute(query, (exercises_id,))

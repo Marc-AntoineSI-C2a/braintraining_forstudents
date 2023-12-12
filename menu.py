@@ -31,6 +31,42 @@ def exercise(event, exer):
 def display_result(event):
     global window_display_result, hex_color, canvas
 
+    def update_table(name=""):
+        for child in canvas.winfo_children():
+            if child.grid_info()["row"] != 0:
+                child.destroy()
+        table_scores = database.getresults(name)
+        for line in range(len(table_scores)):
+            # Search students name in this row
+            student_name = database.get_playername(table_scores[line][0])
+            # Search exercise name in this row
+            exercise_name = database.get_exercisename(table_scores[line][3])[0]
+            # Show this rows and the written column values
+            lbl_player = tk.Label(canvas, text=student_name[0], font=("Arial", 10), width=18, bg="white")
+            lbl_player.grid(row=line + 1, column=0, ipady=5, padx=0, pady=5)
+            lbl_date_heure = tk.Label(canvas, text=table_scores[line][1], font=("Arial", 10), width=18,
+                                      bg="white")
+            lbl_date_heure.grid(row=line + 1, column=1, ipady=5, padx=0, pady=5)
+            lbl_duration = tk.Label(canvas, text=table_scores[line][2], font=("Arial", 10), width=18, bg="white")
+            lbl_duration.grid(row=line + 1, column=2, ipady=5, padx=0, pady=5)
+            lbl_exercise = tk.Label(canvas, text=exercise_name, font=("Arial", 10), width=18, bg="white")
+            lbl_exercise.grid(row=line + 1, column=3, ipady=5, padx=0, pady=5)
+            lbl_nb_success = tk.Label(canvas, text=table_scores[line][4], font=("Arial", 10), width=18, bg="white")
+            lbl_nb_success.grid(row=line + 1, column=4, ipady=5, padx=0, pady=5)
+            lbl_nb_tries = tk.Label(canvas, text=table_scores[line][3], font=("Arial", 10), width=18,
+                                    bg="white")
+            lbl_nb_tries.grid(row=line + 1, column=5, ipady=5, padx=0, pady=5)
+            # To prevent errors, we are going to check if the value is 0 (can't divide by 0)
+            if table_scores[line][3] == 0:
+                print("Division by 0, value skipped")
+            else:
+                success_percentage = 100 * table_scores[line][4] / table_scores[line][3]
+                success_percentage = round(success_percentage, 2)
+                # Calculate the percent of success and then write it in the window
+                lbl_success_percentage = tk.Label(canvas, text=f"{success_percentage}%", font=("Arial", 10), width=15,
+                                                  bg="white")
+                lbl_success_percentage.grid(row=line + 1, column=6, ipady=5, padx=0, pady=5)
+
     window_display_result = tk.Toplevel(window)
     window_display_result.title("Résultats")
     window_display_result.geometry("1100x900")
@@ -68,46 +104,20 @@ def display_result(event):
     lbl_success_percentage = tk.Label(canvas, text="% réussi", font=("Arial", 10), width=20)
     lbl_success_percentage.grid(row=0, column=6, ipady=5, padx=0, pady=5)
 
-    table_scores = database.get_allScores()
-    auto_increment_number = 0
-    for line in table_scores:
-        # Search students name in this row
-        student_name = database.get_playername(table_scores[auto_increment_number][5])
-        # Search exercise name in this row
-        exercise_name = database.get_exercisename(table_scores[auto_increment_number][6])
-        # Show this rows and the written column values
-        lbl_player = tk.Label(canvas, text=student_name[0], font=("Arial", 10), width=18, bg="white")
-        lbl_player.grid(row=auto_increment_number + 1, column=0, ipady=5, padx=0, pady=5)
-        lbl_date_heure = tk.Label(canvas, text=table_scores[auto_increment_number][1], font=("Arial", 10), width=18,
-                                  bg="white")
-        lbl_date_heure.grid(row=auto_increment_number + 1, column=1, ipady=5, padx=0, pady=5)
-        lbl_duration = tk.Label(canvas, text=table_scores[auto_increment_number][4], font=("Arial", 10), width=18, bg="white")
-        lbl_duration.grid(row=auto_increment_number + 1, column=2, ipady=5, padx=0, pady=5)
-        lbl_exercise = tk.Label(canvas, text=exercise_name[0], font=("Arial", 10), width=18, bg="white")
-        lbl_exercise.grid(row=auto_increment_number + 1, column=3, ipady=5, padx=0, pady=5)
-        lbl_nb_success = tk.Label(canvas, text=table_scores[auto_increment_number][2], font=("Arial", 10), width=18, bg="white")
-        lbl_nb_success.grid(row=auto_increment_number + 1, column=4, ipady=5, padx=0, pady=5)
-        lbl_nb_tries = tk.Label(canvas, text=table_scores[auto_increment_number][3], font=("Arial", 10), width=18,
-                               bg="white")
-        lbl_nb_tries.grid(row=auto_increment_number + 1, column=5, ipady=5, padx=0, pady=5)
-        # To prevent errors, we are going to check if the value is 0 (can't divide by 0)
-        if table_scores[auto_increment_number][5] == 0:
-            print("Division by 0, value skipped")
-        else:
-            success_percentage = 100 / table_scores[auto_increment_number][3]
-            success_percentage = success_percentage * table_scores[auto_increment_number][2]
-            success_percentage = round(success_percentage,2)
-            # Calculate the percent of success and then write it in the window
-            lbl_success_percentage = tk.Label(canvas, text=f"{success_percentage}%", font=("Arial", 10), width=15, bg="white")
-            lbl_success_percentage.grid(row=auto_increment_number + 1, column=6, ipady=5, padx=0, pady=5)
-        # Increment the number by 1
-        auto_increment_number = auto_increment_number + 1
     lbl_title_total = tk.Label(window_display_result, text="Total", font=("Arial", 15))
     lbl_title_total.grid(row=14, column=4, ipady=5, padx=40, pady=40)
+
+    btn_results = tk.Button(window_display_result, text="Display results", font=("Arial", 15),
+                            command=lambda: update_table(entry_pseudo.get()))
+    btn_results.grid(row=15, column=2)
+
     # color définition
     rgb_color = (139, 201, 194)
     hex_color = '#%02x%02x%02x' % rgb_color  # translation in hexa
     window_display_result.configure(bg=hex_color)
+    entry_pseudo = tk.Entry(window_display_result, font=("Arial", 15))
+    entry_pseudo.grid(row=69, column=0)
+    update_table()
     # main loop
     window_display_result.mainloop()
 
