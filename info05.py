@@ -177,7 +177,7 @@ def sl_b(value):
     maxi = int(max(rgb_response[0], rgb_response[1], rgb_response[2]) / 2.55)
     slider_v.set(maxi)
     display()
-
+#blablabla
 
 #change the value of v (hsv) in rgb_response
 def sl_v(event):

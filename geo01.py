@@ -26,6 +26,7 @@ pseudo = "Gaston"  # provisory pseudo for user
 exercise = "GEO01"
 nbtrials = 0  # number of total trials
 nbsuccess = 0  # number of successfull trials
+#blablabla
 
 
 # on canvas click, check if succeded or failed

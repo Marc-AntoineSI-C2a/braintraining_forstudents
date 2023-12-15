@@ -110,6 +110,7 @@ def display_result(event):
     btn_results = tk.Button(window_display_result, text="Display results", font=("Arial", 15),
                             command=lambda: update_table(entry_pseudo.get()))
     btn_results.grid(row=15, column=2)
+    #blablabla
 
     # color définition
     rgb_color = (139, 201, 194)

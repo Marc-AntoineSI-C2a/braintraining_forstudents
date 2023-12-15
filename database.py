@@ -54,6 +54,7 @@ def get_playerid(player):
     row = cursor.fetchone()
     cursor.close()
     return row
+#blablabla
 
 
 def getresults(name=""):

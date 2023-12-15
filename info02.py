@@ -26,6 +26,7 @@ u1 = unite[0]
 n2 = 0  # valeur à convertir
 u2 = unite[0]
 rapport = 0
+#blablabla
 
 
 def next(event):
