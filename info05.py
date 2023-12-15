@@ -49,7 +49,7 @@ def next_color(event):
     entry_response.insert(0,"#")
     global rgb
     rgb = [random.randint(0,255),random.randint(0,255),random.randint(0,255)]
-    display();
+    display()
 
 
 #display the exercise and response
@@ -201,6 +201,7 @@ def save_game(event):
     get_player_id = database.get_playerid(pseudo)
     get_exercise_id = database.get_exercisesid(exercise)
     database.add_scores(start_date,nbsuccess,nbtrials,duration,get_player_id[0],get_exercise_id[0])
+    window_info05.destroy()
     print("dans save")
 
 

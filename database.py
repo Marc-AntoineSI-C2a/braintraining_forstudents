@@ -7,6 +7,7 @@ Date: 14.11.2023
 import csv
 import mysql.connector
 
+
 def open_dbconnection():
     global db_connection
     db_connection = mysql.connector.connect(host='127.0.0.1', port='3306',
@@ -26,6 +27,7 @@ def add_students(user):
     cursor.close()
     return inserted_id
 
+
 def add_scores(date_start,number_of_successes, number_of_tries, duration, Players_id, Exercises_id):
     query = "INSERT INTO scores (date_start,number_of_successes, number_of_tries, duration, Players_id, Exercises_id) values (%s, %s, %s, %s, %s, %s)"
     cursor = db_connection.cursor()
@@ -33,6 +35,7 @@ def add_scores(date_start,number_of_successes, number_of_tries, duration, Player
     inserted_id = cursor.lastrowid
     cursor.close()
     return inserted_id
+
 
 def get_exercisesid(exercise):
     query = "SELECT id FROM exercises WHERE name = %s"
@@ -51,6 +54,7 @@ def get_playerid(player):
     row = cursor.fetchone()
     cursor.close()
     return row
+
 
 def getresults(name=""):
     try:

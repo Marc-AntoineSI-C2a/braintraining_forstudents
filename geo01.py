@@ -50,7 +50,7 @@ def canvas_click(event):
     else:
         window_geo01.configure(bg="green")
         nbsuccess += 1
-    lbl_result.configure(text="Essais réussis : {nbsuccess} / {nbtrials}")
+    lbl_result.configure(text=f"Essais réussis : {nbsuccess} / {nbtrials}")
     window_geo01.update()
     time.sleep(1)  # delai 1s
     next_point(event=None)
@@ -97,6 +97,7 @@ def save_game(event):
     get_player_id = database.get_playerid(pseudo)
     get_exercise_id = database.get_exercisesid(exercise)
     database.add_scores(start_date,nbsuccess,nbtrials,duration,get_player_id[0],get_exercise_id[0])
+    window_geo01.destroy()
     print("dans save")
 
 
